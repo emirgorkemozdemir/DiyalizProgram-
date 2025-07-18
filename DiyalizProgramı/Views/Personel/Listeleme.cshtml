@@ -1,0 +1,57 @@
+﻿@using EntityLayer;
+@model List<Personel>
+
+
+@{
+   
+    ViewBag.Title = "Personel Listesi";
+}
+
+<h2 class="my-3">Personel Listesi</h2>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Personel ID</th>
+                <th>Ad</th>
+                <th>Soyad</th>
+                <th>Unvan</th>
+                <th>Branş</th>
+                <th>Telefon</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var personel in Model)
+            {
+                <tr>
+                    <td>@personel.PersonelId</td>
+                    <td>@personel.Ad</td>
+                    <td>@personel.Soyad</td>
+                    <td>@personel.Unvan</td>
+                    <td>@personel.Brans</td>
+                    <td>@personel.Telefon</td>
+                    <td>
+                        <a href="/Personel/Güncelle/@personel.PersonelId" class="btn btn-warning btn-sm">Güncelle</a>
+                        <a href="/Personel/Sil/@personel.PersonelId" class="btn btn-danger btn-sm">Sil</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<form method="get" action="/Personel/Filtreleme">
+    <input name="isimegöre" type="text" placeholder="İsme göre filtrele" />
+    
+
+
+    <button onclick="isim_filtre"> İsme göre filtrele</button>
+
+
+</form>
+
+@for (int i = 1; i <= ViewBag.SayfaSayısı; i++)
+{
+    <a href="/Personel/Listeleme?SayfaSayısı=@i">@i</a>
+}

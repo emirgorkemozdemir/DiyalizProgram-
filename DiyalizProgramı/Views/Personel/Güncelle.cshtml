@@ -1,0 +1,40 @@
+﻿@using EntityLayer;
+@model Personel
+
+
+<h2>Personel Güncelle</h2>
+
+@using (Html.BeginForm("Güncelle", "Personel", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.PersonelId)
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Ad)
+        @Html.TextBoxFor(m => m.Ad, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Ad, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Soyad)
+        @Html.TextBoxFor(m => m.Soyad, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Soyad, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Unvan)
+        @Html.TextBoxFor(m => m.Unvan, new { @class = "form-control", placeholder = "Örn: Dr., Hemşire" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Brans)
+        @Html.TextBoxFor(m => m.Brans, new { @class = "form-control", placeholder = "Örn: Kardiyoloji" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Telefon)
+        @Html.TextBoxFor(m => m.Telefon, new { @class = "form-control", placeholder = "05xx xxx xx xx" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+}

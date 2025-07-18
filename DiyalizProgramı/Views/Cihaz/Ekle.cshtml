@@ -1,0 +1,43 @@
+﻿@using EntityLayer
+@model Cihaz
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<h2>Yeni Cihaz Ekle</h2>
+
+@using (Html.BeginForm("Ekle", "Cihaz", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.MarkaModel)
+        @Html.TextBoxFor(m => m.MarkaModel, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.SeriNo)
+        @Html.TextBoxFor(m => m.SeriNo, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.CihazTipi)
+        @Html.TextBoxFor(m => m.CihazTipi, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.SonBakimTarihi)
+        @Html.TextBoxFor(m => m.SonBakimTarihi, new { @class = "form-control", type = "date" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Durum)
+        @Html.TextBoxFor(m => m.Durum, new { @class = "form-control" })
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-success">Kaydet</button>
+    <a href="@Url.Action("Listeleme", "Cihaz")" class="btn btn-secondary">İptal</a>
+}

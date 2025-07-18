@@ -1,0 +1,99 @@
+﻿@using EntityLayer;
+@model Hasta
+
+
+
+
+@using (Html.BeginForm("Ekle", "Hasta", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div>
+        @ViewBag.isim
+    </div>
+
+    <div class="mb-3">
+        <input type="text" name="DoktorId" class="form-control" value="@ViewBag.isim" />
+    </div>    
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Ad)
+        @Html.TextBoxFor(m => m.Ad, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Ad)
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Soyad)
+        @Html.TextBoxFor(m => m.Soyad, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Soyad)
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.TckimlikNo)
+        @Html.TextBoxFor(m => m.TckimlikNo, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.TckimlikNo)
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.DogumTarihi)
+        @Html.TextBoxFor(m => m.DogumTarihi, new { @class = "form-control", type = "date" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Cinsiyet)
+        @Html.DropDownListFor(m => m.Cinsiyet,
+                new List<SelectListItem>
+    {
+    new SelectListItem { Text = "Erkek", Value = "E" },
+    new SelectListItem { Text = "Kadın", Value = "K" }
+    },
+                "Seçiniz", 
+                new { @class = "form-control" })
+    </div>
+
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.KanGrubu)
+        @Html.DropDownListFor(m => m.KanGrubu, new SelectList(new[] { "0-", "0+", "A-", "A+", "B-", "B+", "AB-", "AB+" }), "Seçiniz", new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Telefon)
+        @Html.TextBoxFor(m => m.Telefon, new { @class = "form-control", type = "tel", placeholder = "05xx xxx xx xx" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Adres)
+        @Html.TextAreaFor(m => m.Adres, new { @class = "form-control", rows = 2 })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Alerjiler)
+        @Html.TextAreaFor(m => m.Alerjiler, new { @class = "form-control", rows = 2 })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.KronikHastaliklar)
+        @Html.TextAreaFor(m => m.KronikHastaliklar, new { @class = "form-control", rows = 2 })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.DoktorId, new { @class = "form-label" })
+
+        @Html.DropDownListFor(m => m.DoktorId, (IEnumerable<SelectListItem>)ViewBag.doktorlar, "-- Doktor Seçin --", new { @class = "form-select" })
+
+        @Html.ValidationMessageFor(m => m.DoktorId, " ", new { @class = "text-danger" })
+ 
+       
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.AktifMi)
+        @Html.DropDownListFor(m => m.AktifMi, new SelectList(new[] {
+    new { Value = "true", Text = "Aktif" },
+    new { Value = "false", Text = "Pasif" }
+    }, "Value", "Text"), "Seçiniz", new { @class = "form-control" })
+    </div>
+    <input type="submit" class="btn btn-primary" />
+
+
+}

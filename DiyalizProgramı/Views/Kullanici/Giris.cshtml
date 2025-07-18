@@ -1,0 +1,31 @@
+﻿@using EntityLayer
+@model Kullanici
+
+
+@{
+    ViewBag.Title = "Giriş Yap";
+}
+
+<h2>Giriş Yap</h2>
+
+@if (ViewBag.msg != null)
+{
+    <div>@ViewBag.msg</div>
+}
+
+@using (Html.BeginForm("Giris", "Kullanici", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.KullaniciAdi)
+        @Html.TextBoxFor(m => m.KullaniciAdi, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.SifreHash)
+        @Html.PasswordFor(m => m.SifreHash, new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Giriş Yap</button>
+}

@@ -1,0 +1,78 @@
+﻿@using EntityLayer;
+@model List<Hasta>
+
+
+
+
+       
+
+
+<div class="container d-flex justify-content-center mt-5">
+    <div class="p-5 rounded-4 text-white" style="background: linear-gradient(to right, #1c1f2b, #2d3e50); max-width: 900px; width: 100%;">
+        <h3 class="text-center mb-4">Hasta Filtreleme</h3>
+        <form action="/Hasta/Filtreleme" method="post" class="d-flex flex-column align-items-center">
+            <input type="text" class="form-control rounded-pill w-75 mb-3" placeholder="Hasta adı girin" name="isimegöre">
+            <button class="btn btn-success rounded-pill px-4">Filtrele</button>
+        </form>
+    </div>
+</div>
+
+
+<head>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+</head>
+
+<h2 class="my-3">Hasta Listesi</h2>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>HastaId</th>
+                <th>Ad</th>
+                <th>Soyad</th>
+                <th>TckimlikNo</th>
+                <th>DogumTarihi</th>
+                <th>Cinsiyet</th>
+                <th>KanGrubu</th>
+                <th>Telefon</th>
+                <th>Adres</th>
+                <th>Alerjiler</th>
+                <th>KronikHastaliklar</th>
+                <th>DoktorId</th>
+                <th>AktifMi</th>
+                <th colspan="3">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Hasta in Model)
+            {
+                <tr>
+                    <td>@Hasta.HastaId</td>
+                    <td>@Hasta.Ad</td>
+                    <td>@Hasta.Soyad</td>
+                    <td>@Hasta.TckimlikNo</td>
+                    <td>@Hasta.DogumTarihi</td>
+                    <td>@Hasta.Cinsiyet</td>
+                    <td>@Hasta.KanGrubu</td>
+                    <td>@Hasta.Telefon</td>
+                    <td>@Hasta.Adres</td>
+                    <td>@Hasta.Alerjiler</td>
+                    <td>@Hasta.KronikHastaliklar</td>
+                    <td>@(Hasta.Doktor?.Ad + " " + Hasta.Doktor?.Soyad)</td>
+                    <td>@Hasta.AktifMi</td>
+                   
+                    <td><a href="/Hasta/Güncelle/@Hasta.HastaId" class="btn btn-warning btn-sm">Güncelle</a></td>
+                    <td><a href="/Hasta/Sil/@Hasta.HastaId" class="btn btn-danger btn-sm">Sil</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+@for (int i = 1; i <= ViewBag.SayfaSayısı; i++)
+{
+    <a href="/Hasta/Listeleme?SayfaSayısı=@i">@i</a>
+}
