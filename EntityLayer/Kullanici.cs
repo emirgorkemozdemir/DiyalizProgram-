@@ -9,7 +9,7 @@ public partial class Kullanici : IDataBaseEntity
 
     public string KullaniciAdi { get; set; } = null!;
 
-    public byte[] SifreHash { get; set; } = null!;
+    public string SifreHash { get; set; } = null!;
 
     public string? Rol { get; set; }
 

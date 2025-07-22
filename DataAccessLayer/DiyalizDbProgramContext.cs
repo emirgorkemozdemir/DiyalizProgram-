@@ -150,7 +150,7 @@ public partial class DiyalizDbProgramContext : DbContext
             entity.Property(e => e.Rol)
                 .HasMaxLength(20)
                 .IsUnicode(false);
-            entity.Property(e => e.SifreHash).HasMaxLength(256);
+            entity.Property(e => e.SifreHash).HasMaxLength(64);
 
             entity.HasOne(d => d.Personel).WithMany(p => p.Kullanicis)
                 .HasForeignKey(d => d.PersonelId)
