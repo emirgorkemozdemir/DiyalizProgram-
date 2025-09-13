@@ -10,6 +10,9 @@ namespace DiyalizProgramı.Controllers
     {
         HastaBL Hasta = new HastaBL();
         PersonelBL personel = new PersonelBL(); 
+        ÖdemeBL odemeler = new ÖdemeBL();
+        FaturaBL faturalar = new FaturaBL();
+        SeansBL seanslar = new SeansBL();
         private async void DoktorlarıYükle()
         {
 
@@ -31,6 +34,13 @@ namespace DiyalizProgramı.Controllers
         
         public async Task<IActionResult> Listeleme(int SayfaSayısı = 1)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris","Kullanici");
+            }
+
             int Sayı = 25 * (SayfaSayısı - 1);
             List<Hasta> HastaListeleme = await Hasta.Methods.List(x => x.Doktor);
             var sayfalama1 = HastaListeleme.OrderByDescending(ah => ah.DogumTarihi).ToList();
@@ -53,9 +63,15 @@ namespace DiyalizProgramı.Controllers
         }
 
   
-    public async Task<IActionResult> Filtreleme(string isimegöre)
+       public async Task<IActionResult> Filtreleme(string isimegöre)
         {
-            List<Hasta> Filtrelisteleme = await Hasta.Methods.List();
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
+            List<Hasta> Filtrelisteleme = await Hasta.Methods.List(a=>a.Doktor);
             if (string.IsNullOrEmpty(isimegöre))
             {
              
@@ -74,10 +90,41 @@ namespace DiyalizProgramı.Controllers
         }
         public async Task<IActionResult> Sil(int id )
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
+
             var SeçiliHasta = await Hasta.Methods.GetbyId(id);
             if (SeçiliHasta is null)
             {
                 TempData["AlertMessage"] = "Müşteri bulunamadı.";
+            }
+
+            // önce müşteriye ait ödeme varsa onları siliyorum.
+            var tum_odemeler = await odemeler.Methods.List();
+            var musterinin_odemeleri = tum_odemeler.Where(x=>x.HastaId == id).ToList();
+            foreach (var odeme in musterinin_odemeleri)
+            {
+               await odemeler.Methods.Delete(odeme);
+            }
+
+            //  müşteriye ait fatura varsa onları siliyorum.
+            var tum_faturalar = await faturalar.Methods.List();
+            var musterinin_faturaları = tum_faturalar.Where(x => x.HastaId == id).ToList();
+            foreach (var fatura in musterinin_faturaları)
+            {
+                await faturalar.Methods.Delete(fatura);
+            }
+
+            //  müşteriye ait seans varsa onları siliyorum.
+            var tum_seanslar = await seanslar.Methods.List();
+            var musterinin_seansları = tum_seanslar.Where(x => x.HastaId == id).ToList();
+            foreach (var seans in musterinin_seansları)
+            {
+                await seanslar.Methods.Delete(seans);
             }
 
             try
@@ -87,7 +134,7 @@ namespace DiyalizProgramı.Controllers
             }
             catch (Exception)
             {
-                TempData["AlertMessage"] = "Silme sırasında bir hata oluştu. Bu müşteriye ait hayvan veya veri bulunmakta.";
+                TempData["AlertMessage"] = "Silme sırasında bir hata oluştu. Bu müşteriye ait veri bulunmakta.";
 
             }
             return RedirectToAction("Listeleme");
@@ -97,6 +144,12 @@ namespace DiyalizProgramı.Controllers
         [HttpGet]
         public async Task<IActionResult> Ekle(int id, string isim)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             DoktorlarıYükle();           
             return View();  
         }
@@ -106,6 +159,12 @@ namespace DiyalizProgramı.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Ekle(Hasta YeniHasta)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             if (ModelState.IsValid)
             {
                 await Hasta.Methods.Add(YeniHasta);
@@ -119,6 +178,12 @@ namespace DiyalizProgramı.Controllers
         }
         public async Task<IActionResult> Güncelle(int id)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             DoktorlarıYükle();
             var Güncelleme = await Hasta.Methods.GetbyId(id);
 
@@ -130,6 +195,12 @@ namespace DiyalizProgramı.Controllers
         public async Task<IActionResult> Güncelle(Hasta HastaGüncelle)
         {
 
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             if (ModelState.IsValid)
             {
                 await Hasta.Methods.Edit(HastaGüncelle);

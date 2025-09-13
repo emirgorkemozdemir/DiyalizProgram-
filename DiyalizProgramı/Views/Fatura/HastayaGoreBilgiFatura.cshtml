@@ -1,0 +1,104 @@
+﻿@using EntityLayer
+@model List<Fatura>
+
+@{
+    Layout = null;
+}
+
+<head>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
+</head>
+
+<div class="container mt-4">
+
+    <!-- Başlık ve Ekleme -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Fatura Listesi</h2>
+        <a href="/Fatura/Ekle" class="btn btn-primary">Yeni Fatura Ekle</a>
+    </div>
+
+  
+
+    <!-- Liste -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Fatura ID</th>
+                    <th>Hasta</th>
+                    <th>Fatura Tarihi</th>
+                    <th>Tutar (₺)</th>
+                    <th>SGK İşlem Kodu</th>
+                    <th>Fatura No</th>
+                    <th>Seans Bilgisi</th>
+                    <th colspan="3" class="text-center">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var fatura in Model)
+                    {
+                        <tr>
+                            <td>@fatura.FaturaId</td>
+
+                            <td>
+                                @if (fatura.Hasta != null)
+                                {
+                                    @($"{fatura.Hasta.Ad} {fatura.Hasta.Soyad}")
+                                }
+                                else
+                                {
+                                    @($"ID: {fatura.HastaId}")
+                                }
+                            </td>
+
+                            <td>@(fatura.FaturaTarihi?.ToString("dd.MM.yyyy") ?? "-")</td>
+                            <td>@(fatura.Tutar?.ToString("N2") ?? "-")</td>
+                            <td>@(string.IsNullOrWhiteSpace(fatura.SgkislemKodu) ? "-" : fatura.SgkislemKodu)</td>
+                            <td>@(string.IsNullOrWhiteSpace(fatura.FaturaNo) ? "-" : fatura.FaturaNo)</td>
+
+                            <td>
+                                @if (fatura.Seans != null)
+                                {
+                                    @($"#{fatura.Seans.SeansId} - {fatura.Seans.TarihSaat.ToString("dd.MM.yyyy HH:mm")}")
+                                }
+                                else
+                                {
+                                    @($"ID: {fatura.SeansId}")
+                                }
+                            </td>
+
+                           
+                            
+                            <td class="text-center">
+                                <a href="/Fatura/Sil/@fatura.FaturaId" class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Bu faturayı silmek istediğinize emin misiniz?');">Sil</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10" class="text-center">Kayıt bulunamadı.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Sayfalama -->
+    <nav aria-label="Sayfalama">
+        <ul class="pagination">
+            @for (int i = 1; i <= (ViewBag.SayfaSayısı ?? 1); i++)
+            {
+                bool aktif = (ViewBag.AktifSayfa ?? 1) == i;
+                <li class="page-item @(aktif ? "active" : "")">
+                    <a class="page-link" href="/Fatura/Listeleme?SayfaSayısı=@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+
+</div>

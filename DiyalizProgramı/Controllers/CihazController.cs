@@ -2,15 +2,22 @@
 using BussinessLayer;
 using EntityLayer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
+
 
 namespace DiyalizProgramı.Controllers
 {
     public class CihazController : Controller
     {
+
         CihazBL Cihazlar = new CihazBL();
         public async Task<IActionResult> Listeleme(int SayfalamaSayısı = 1)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
 
             int Sayı = 25 * (SayfalamaSayısı - 1);
             List<Cihaz> CihazListeleme = await Cihazlar.Methods.List();
@@ -37,7 +44,13 @@ namespace DiyalizProgramı.Controllers
 
         public async Task<IActionResult> Filtreleme(DateOnly BakımTarihi)
         {
-            List<Cihaz> Filtrelisteleme = await Cihazlar.Methods.List();
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
+            List<Cihaz> Filtrelisteleme = await Cihazlar.Methods.List(a=>a.Seans);
 
             var filtre = Filtrelisteleme.Where(po => po.SonBakimTarihi >= BakımTarihi).ToList();
 
@@ -46,6 +59,12 @@ namespace DiyalizProgramı.Controllers
 
         public async Task<IActionResult> Sil(int id)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             Cihaz secili_cihaz = await Cihazlar.Methods.GetbyId(id);
 
             await Cihazlar.Methods.Delete(secili_cihaz);
@@ -56,12 +75,24 @@ namespace DiyalizProgramı.Controllers
         [HttpGet]
         public async Task<IActionResult> Ekle()
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Ekle(Cihaz yenicihaz)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             if (ModelState.IsValid)
             {
                 await Cihazlar.Methods.Add(yenicihaz);
@@ -76,6 +107,12 @@ namespace DiyalizProgramı.Controllers
         [HttpGet]
         public async Task<IActionResult> Guncelle(int id)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             var cihaz_kaydi = await Cihazlar.Methods.GetbyId(id);
             return View(cihaz_kaydi);
         }
@@ -83,6 +120,12 @@ namespace DiyalizProgramı.Controllers
         [HttpPost]
         public async Task<IActionResult> Guncelle(Cihaz yenicihaz)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             if (ModelState.IsValid)
             {
                 await Cihazlar.Methods.Edit(yenicihaz);

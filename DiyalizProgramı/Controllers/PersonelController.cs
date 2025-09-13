@@ -9,6 +9,12 @@ namespace DiyalizProgramı.Controllers
         PersonelBL Personel = new PersonelBL();
         public async Task<IActionResult> Listeleme(int SayfaSayısı = 1)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
 
             int Sayı = 25 * (SayfaSayısı - 1);
             List<Personel> PersonelListeleme = await Personel.Methods.List(x => x.Hasta);
@@ -33,6 +39,12 @@ namespace DiyalizProgramı.Controllers
 
         public async Task<IActionResult> Filtreleme(string isimegöre)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             List<Personel> Filtrelisteleme = await Personel.Methods.List();
             if (string.IsNullOrEmpty(isimegöre))
             {
@@ -53,6 +65,12 @@ namespace DiyalizProgramı.Controllers
         }
         public async Task<IActionResult> Sil(int id)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             var SeçiliPersonel = await Personel.Methods.GetbyId(id);
             if (SeçiliPersonel is null)
             {
@@ -75,6 +93,12 @@ namespace DiyalizProgramı.Controllers
 
         public async Task<IActionResult> ekle(int Id, string İsim)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             ViewBag.İsim = İsim;
             ViewBag.Id = Id;
             return View();
@@ -83,6 +107,12 @@ namespace DiyalizProgramı.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Ekle(Personel YeniPersonel)
         {
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             if (ModelState.IsValid)
             {
                 await Personel.Methods.Add(YeniPersonel);
@@ -95,7 +125,12 @@ namespace DiyalizProgramı.Controllers
         }
         public async Task<IActionResult> Güncelle(int id)
         {
-           
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             var Güncelleme = await Personel.Methods.GetbyId(id);
 
             return View(Güncelleme);
@@ -106,6 +141,12 @@ namespace DiyalizProgramı.Controllers
         public async Task<IActionResult> Güncelle(Personel PersonelGüncelle)
         {
 
+            string? kullanici_girisli_mi = kullanici_girisli_mi = HttpContext.Session.GetString("kullanici_giris_yapti_mi");
+
+            if (kullanici_girisli_mi == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
             if (ModelState.IsValid)
             {
                 await Personel.Methods.Edit(PersonelGüncelle);

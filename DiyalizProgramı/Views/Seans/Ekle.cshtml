@@ -1,0 +1,88 @@
+﻿@using EntityLayer
+@model Seans
+
+@{
+    ViewBag.Title = "Seans Ekle";
+    // (Opsiyonel) Hasta bilgisini göstermek istersen:
+  
+}
+
+@using (Html.BeginForm("Ekle", "Seans", FormMethod.Post, new { @class = "row g-3" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+    <!-- Tarih/Saat -->
+    <div class="col-md-6">
+        @Html.LabelFor(m => m.TarihSaat, new { @class = "form-label" })
+        @Html.TextBoxFor(
+        m => m.TarihSaat,
+        "{0:yyyy-MM-ddTHH:mm}",
+        new { @class = "form-control", type = "datetime-local" }
+        )
+    @Html.ValidationMessageFor(m => m.TarihSaat, "", new { @class = "text-danger" })
+</div>
+
+<!-- Doktor (Personel) -->
+<div class="col-md-6">
+    @Html.LabelFor(m => m.PersonelId, "Doktor", new { @class = "form-label" })
+    @Html.DropDownListFor(
+        m => m.PersonelId,
+        (IEnumerable<SelectListItem>)ViewBag.doktorlar,
+        "-- Doktor Seçin --",
+        new { @class = "form-select" })
+    @Html.ValidationMessageFor(m => m.PersonelId, "", new { @class = "text-danger" })
+</div>
+
+<!-- Cihaz -->
+<div class="col-md-6">
+    @Html.LabelFor(m => m.CihazId, "Cihaz", new { @class = "form-label" })
+    @Html.DropDownListFor(
+        m => m.CihazId,
+        (IEnumerable<SelectListItem>)ViewBag.cihazlar,
+        "-- Cihaz Seçin --",
+        new { @class = "form-select" })
+    @Html.ValidationMessageFor(m => m.CihazId, "", new { @class = "text-danger" })
+</div>
+
+<!-- Durum -->
+<div class="col-md-6">
+    @Html.LabelFor(m => m.Durum, new { @class = "form-label" })
+    @Html.DropDownListFor(
+        m => m.Durum,
+        new List<SelectListItem>
+        {
+        new SelectListItem { Text = "Planlandı",   Value = "Planlandı" },
+        new SelectListItem { Text = "Tamamlandı", Value = "Tamamlandı" },
+        new SelectListItem { Text = "İptal",       Value = "İptal" }
+        },
+        "-- Seçiniz --",
+        new { @class = "form-select" })
+    @Html.ValidationMessageFor(m => m.Durum, "", new { @class = "text-danger" })
+</div>
+
+<!-- Notlar -->
+<div class="col-12">
+    @Html.LabelFor(m => m.Notlar, new { @class = "form-label" })
+    @Html.TextAreaFor(m => m.Notlar, new { @class = "form-control", rows = 3, placeholder = "Seans ile ilgili notlar..." })
+    @Html.ValidationMessageFor(m => m.Notlar, "", new { @class = "text-danger" })
+</div>
+
+<!-- (İsteğe bağlı) Tıbbi Değerler hızlı giriş kapısı -->
+@* Bu kısım seans kaydından sonra ayrı bir sayfaya yönlendirme yapacaksan kaldırılabilir.
+       Veya seans kaydından sonra TibbiDeğer ekleme modali açılacaksa burada bir buton bırakılabilir. *@
+@* <div class="col-12">
+        <a href="@Url.Action("Ekle","TibbiDegerler", new { seansId = Model.SeansId })" class="btn btn-outline-secondary">
+            Tıbbi Değer Ekle (seanstan sonra)
+        </a>
+    </div> *@
+
+<div class="col-12">
+    <button type="submit" class="btn btn-primary">
+        Kaydet
+    </button>
+    <a href="@Url.Action("HastayaGoreBilgi", "Seans")" class="btn btn-outline-secondary ms-2">Vazgeç</a>
+</div>
+}

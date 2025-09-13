@@ -1,6 +1,8 @@
 ﻿@using EntityLayer;
 @model List<Hasta>
-
+@{
+    Layout = null;
+}
 
 
 
@@ -41,7 +43,10 @@
                 <th>KronikHastaliklar</th>
                 <th>DoktorId</th>
                 <th>AktifMi</th>
-                <th colspan="3">İşlemler</th>
+                <th colspan="2">İşlemler</th>
+                <th>Seans Bilgileri</th>
+                <th>Fatura Bilgileri</th>
+                <th>Ödeme Bilgileri</th>
             </tr>
         </thead>
         <tbody>
@@ -62,8 +67,20 @@
                     <td>@(Hasta.Doktor?.Ad + " " + Hasta.Doktor?.Soyad)</td>
                     <td>@Hasta.AktifMi</td>
                    
+
                     <td><a href="/Hasta/Güncelle/@Hasta.HastaId" class="btn btn-warning btn-sm">Güncelle</a></td>
-                    <td><a href="/Hasta/Sil/@Hasta.HastaId" class="btn btn-danger btn-sm">Sil</a></td>
+
+                    <td>
+                        <a href="/Hasta/Sil/@Hasta.HastaId"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Müşteriyi sildiğinizde müşteriye ait fatura / ödeme bilgileri de silinecektir.');">
+                            Sil
+                        </a>
+                    </td>
+
+                    <td><a href="/Seans/HastayaGoreBilgi?id=@Hasta.HastaId" class="btn btn-danger btn-sm">Seans Bilgilerini Görüntüle</a></td>
+                    <td><a href="/Fatura/HastayaGoreBilgiFatura?id=@Hasta.HastaId" class="btn btn-danger btn-sm">Fatura Bilgilerini Görüntüle</a></td>
+                    <td><a href="/Odeme/HastayaGoreBilgiOdeme?id=@Hasta.HastaId" class="btn btn-danger btn-sm">Ödeme Bilgilerini Görüntüle</a></td>
                 </tr>
             }
         </tbody>
